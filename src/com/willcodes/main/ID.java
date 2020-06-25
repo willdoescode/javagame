@@ -1,4 +1,6 @@
 package com.willcodes.main;
 
-public class ID {
+public enum ID {
+    Player(),
+    Enemy();
 }
