@@ -1,16 +1,29 @@
 package com.willcodes.main;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
 
     public static final int WIDTH = 640, HEIGHT = WIDTH / 12 * 9;
     private Thread thread;
     private boolean running = false;
+    public static int frames;
+
+    private final Handler handler;
 
     public Game() {
-        new Window(WIDTH, HEIGHT, "Lets build a game", this);
+        HUD hud = new HUD();
+        handler = new Handler();
+        this.addKeyListener(new KeyInput(handler));
+        new Window(WIDTH, HEIGHT, "Wills Game", this);
+        Random r = new Random();
+
+        handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player));
+        handler.addObject(new BasicEnemy(WIDTH/2-32, HEIGHT/2-32, ID.BasicEnemy));
+
     }
 
     public synchronized void start() {
@@ -29,12 +42,13 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void run() {
+        this.requestFocus();
         long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
+        double amountOfTicks = 70.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         long timer = System.currentTimeMillis();
-        int frames = 0;
+        frames = 0;
         while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -56,7 +70,8 @@ public class Game extends Canvas implements Runnable {
         stop();
     }
     private void tick() {
-        
+        handler.tick();
+        HUD.tick();
     }
     private void render() {
         BufferStrategy bs = this.getBufferStrategy();
@@ -67,8 +82,20 @@ public class Game extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
+        handler.render(g);
+        HUD.render(g);
         g.dispose();
         bs.show();
+    }
+
+    public static int clamp(int var, int min, int max) {
+        if (var >= max) {
+            return var = max;
+        } else if (var <= min) {
+            return var = min;
+        }
+        else
+            return var;
     }
 
     public static void main(String[] args) {

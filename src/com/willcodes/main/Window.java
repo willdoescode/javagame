@@ -2,8 +2,10 @@ package com.willcodes.main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Panel;
 
 public class Window extends Canvas {
+
     public Window(int width, int height, String title, Game game) {
         JFrame frame = new JFrame(title);
 
