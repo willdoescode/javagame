@@ -18,6 +18,7 @@ public class Window extends Canvas {
         frame.setLocationRelativeTo(null);
         frame.add(game);
         frame.setVisible(true);
+        frame.setAlwaysOnTop(true);
         game.start();
 
     }
