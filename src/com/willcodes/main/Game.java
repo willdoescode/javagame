@@ -13,17 +13,19 @@ public class Game extends Canvas implements Runnable {
     public static int frames;
 
     private final Handler handler;
-    private Spawner spawner;
+
 
     public Game() {
         HUD hud = new HUD();
         handler = new Handler();
-        spawner = new Spawner(handler, hud);
         this.addKeyListener(new KeyInput(handler));
         new Window(WIDTH, HEIGHT, "Wills Game", this);
         Random r = new Random();
 
         handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler));
+        for (int i = 0; i < 6; i++) {
+            handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
+        }
 
 
     }
@@ -65,7 +67,6 @@ public class Game extends Canvas implements Runnable {
             frames++;
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                System.out.println("FPS: " + frames);
                 frames = 0;
             }
         }

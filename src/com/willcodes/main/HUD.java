@@ -7,6 +7,8 @@ public class HUD {
 
     public static void tick() {
         HEALTH = Game.clamp(HEALTH, 0, 100);
+        if (HEALTH == 0)
+            System.exit(0);
     }
     public static void render(Graphics g) {
         g.setColor(Color.gray);
